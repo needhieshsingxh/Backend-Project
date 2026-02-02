@@ -1,0 +1,33 @@
+# Backend Project
+
+A YouTube-like backend
+
+## What's this?
+
+Basically a video platform backend with:
+
+- User signup/login (JWT auth with access & refresh tokens)
+- Video uploads via Cloudinary
+- Subscriptions (like YouTube's subscribe feature)
+- MongoDB for storing everything
+
+## Tech Stack
+
+- Node.js + Express
+- MongoDB + Mongoose
+- Cloudinary (for video/image uploads)
+- JWT for auth
+- bcrypt for password hashing
+- multer for file handling
+
+## Setup
+
+1. Clone it
+2. `cd Backend && npm install`
+3. Copy `.env.sample` to `.env` and fill in your stuff:
+   - MongoDB connection string
+   - Cloudinary credentials
+   - JWT secrets (just make up some random strings)
+4. `npm start`
+
+Still working on it. User auth is done, video stuff is in progress.
