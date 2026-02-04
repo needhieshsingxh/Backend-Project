@@ -4,12 +4,17 @@ import uploadOnCloudinary from "../utils/cloudinary.fileupload.js";
 import { User } from "../models/user.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
+/**
+ * @desc    Register a new user
+ * @route   POST /api/v1/users/register
+ * @access  Public
+ */
 const registerUser = asyncHandler(async (req, res) => {
   const { fullName, email, username, password } = req.body;
   if (
     [fullName, email, username, password].some((field) => field?.trim() === "")
   ) {
-    throw new ApiError(400, "ALL fields are rquired");
+    throw new ApiError(400, "All fields are required");
   }
   const existedUser = await User.findOne({
     $or: [{ username }, { email }],
@@ -379,6 +384,25 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
       new ApiResponse(200, channel[0], "User channel fetched successfully")
     );
 });
+
+const getWatchHistory = asyncHandler(async(req, res)=>{
+     const user = await User.aggregate( 
+      [
+        {
+          $match:{
+            _id: new mongoose.Types.ObjectId(req.user._id)
+          }
+          },
+          {
+            $lookup:{
+              from: "videos",
+              localField: "watchHistory",
+              foreignField: 
+            }
+          }
+      ]
+    )
+})
 
 export {
   registerUser,
