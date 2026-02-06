@@ -4,11 +4,7 @@ import uploadOnCloudinary from "../utils/cloudinary.fileupload.js";
 import { User } from "../models/user.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
-/**
- * @desc    Register a new user
- * @route   POST /api/v1/users/register
- * @access  Public
- */
+
 const registerUser = asyncHandler(async (req, res) => {
   const { fullName, email, username, password } = req.body;
   if (
@@ -397,11 +393,41 @@ const getWatchHistory = asyncHandler(async(req, res)=>{
             $lookup:{
               from: "videos",
               localField: "watchHistory",
-              foreignField: 
+              foreignField: "_id",
+              as: "watchHistory",
+              pipeline: [
+                {
+                  $lookup: {
+                    from: "user",
+                    localField: "users",
+                    foreignField: "_id",
+                    as: "owner",
+                    pipeline:[
+                      {
+                        $project:{
+                          fullName: 1,
+                          username: 1,
+                          avatar: 1
+                        }
+                      },
+                      {
+                        $addFields:{
+                          owener:{
+                            $first: "$owner"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
             }
+
           }
       ]
     )
+
+    return res.staus(200).json(new ApiResponse(200, user[0].watchHistor, "Watch History fetched successfully"))
 })
 
 export {
@@ -415,4 +441,5 @@ export {
   updateUserAvatar,
   updateUserCoverImage,
   getUserChannelProfile,
+  getWatchHistory
 };
