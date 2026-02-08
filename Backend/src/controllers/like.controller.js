@@ -117,6 +117,11 @@ const getLikedVideos = asyncHandler(async (req, res) => {
             $unwind: "$videoLiked"
         }
     ])
+    
+    if(likedVideo?.length <= 0){
+        return res.status(404).json(new ApiError(404, "No video found"))
+    }
+
     return res.status(200).json(new ApiResponse(200, likedVideo, "List of liked Video"))
 
 
