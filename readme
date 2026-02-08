@@ -30,4 +30,7 @@ Basically a video platform backend with:
    - JWT secrets (just make up some random strings)
 4. `npm start`
 
+## Model Link
+Link: https://app.eraser.io/workspace/YtPqZ1VogxGy1jzIDkzj
+
 Still working on it. User auth is done, video stuff is in progress.
