@@ -81,10 +81,72 @@ const addComment = asyncHandler(async (req, res) => {
 
 const updateComment = asyncHandler(async (req, res) => {
   // TODO: update a comment
+  const { content } = req.body;
+  if (!content || content.trim() === "") {
+    return res.status(404).json(new ApiError(404, "Comment is required"));
+  }
+
+  const { videoId, commentId } = req.params;
+  if (!videoId) {
+    return res.status(400).json(new ApiError(400, "VideoId invalid"));
+  }
+
+  if (!commentId) {
+    return res.status(400).json(new ApiError(400, "commentId invalid"));
+  }
+
+  const userId = req.user?._id;
+  if (!userId) {
+    return res.status(401).json(new ApiError(404, "Invalid user"));
+  }
+
+  const updatedComment = await Comment.findOneAndUpdate(
+    {
+      _id: commentId,
+      owner: userId,
+      video: videoId,
+    },
+    { $set: { content: content } },
+    { new: true }
+  );
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, updatedComment, "Comment update successful"));
 });
 
 const deleteComment = asyncHandler(async (req, res) => {
   // TODO: delete a comment
+
+  const { videoId, commentId } = req.params;
+  if (!videoId) {
+    return res.status(400).json(new ApiError(400, "VideoId invalid"));
+  }
+
+  if (!commentId) {
+    return res.status(400).json(new ApiError(400, "commentId invalid"));
+  }
+
+  const userId = req.user?._id;
+  if (!userId) {
+    return res.status(401).json(new ApiError(401, "Invalid user"));
+  }
+
+  const deleteComment = await Comment.findOneAndDelete({
+    _id: commentId,
+    owner: userId,
+    video: videoId,
+  });
+
+  if (!deleteComment) {
+    return res.status(404).json({
+      message: "Action failed. Comment not found or unauthorized.",
+    });
+  }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, deleteComment, "Comment deleted successfully"));
 });
 
 export { getVideoComments, addComment, updateComment, deleteComment };
