@@ -6,9 +6,24 @@ import {asyncHandler} from "../utils/asyncHandler.js"
 
 
 const createPlaylist = asyncHandler(async (req, res) => {
-    const {name, description} = req.body
-
     //TODO: create playlist
+   
+    const {name, description} = req.body
+    if(!name || !description){
+        return res.status(400).json(new ApiErro(400, "Name and description required to create a playlist"))
+    }
+
+    const userId = req.user?._id;
+    if(!userId){
+        return res.status(400).json(new ApiError(400, "Invalid userId"));
+    }
+
+    const {videoId} = req.params;
+    if(!videoId){
+    return res.status(400).json(400, "Invalid VideoId") }
+    
+    
+    
 })
 
 const getUserPlaylists = asyncHandler(async (req, res) => {
