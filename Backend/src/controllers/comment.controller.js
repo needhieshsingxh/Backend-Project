@@ -5,7 +5,6 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
 const getVideoComments = asyncHandler(async (req, res) => {
-  //TODO: get all comments for a video
   const { videoId } = req.params;
   const { page = 1, limit = 10 } = req.query;
 
@@ -32,10 +31,10 @@ const getVideoComments = asyncHandler(async (req, res) => {
       $unwind: "$allComment",
     },
     {
-      $sort: { createdAt: -1 }, // newest first
+      $sort: { createdAt: -1 }, 
     },
     {
-      $limit: 10, // top 10 only
+      $limit: 10, 
     },
     {
       $project: {
@@ -52,7 +51,7 @@ const getVideoComments = asyncHandler(async (req, res) => {
 });
 
 const addComment = asyncHandler(async (req, res) => {
-  // TODO: add a comment to a video
+  
   const { videoId } = req.params;
   if (!videoId) {
     return res.status(404).json(new ApiError(200, "videoId doesn't exist"));
@@ -80,7 +79,7 @@ const addComment = asyncHandler(async (req, res) => {
 });
 
 const updateComment = asyncHandler(async (req, res) => {
-  // TODO: update a comment
+  
   const { content } = req.body;
   if (!content || content.trim() === "") {
     return res.status(404).json(new ApiError(404, "Comment is required"));
@@ -116,7 +115,7 @@ const updateComment = asyncHandler(async (req, res) => {
 });
 
 const deleteComment = asyncHandler(async (req, res) => {
-  // TODO: delete a comment
+  
 
   const { videoId, commentId } = req.params;
   if (!videoId) {
