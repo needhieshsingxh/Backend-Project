@@ -23,6 +23,7 @@ import healthCheckRouter from "./routes/healthcheck.routes.js";
 import likeRouter from "./routes/like.routes.js";
 import commmentRouter from "./routes/comment.routes.js"
 import subscriptionsRouter from "./routes/subscription.route.js"
+import playlist from "./routes/playlist.routes.js"
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/tweet", tweetRouter);
@@ -30,5 +31,6 @@ app.use("/api/v1/", healthCheckRouter);
 app.use("/api/v1/like", likeRouter);
 app.use("/api/v1/comment", commmentRouter);
 app.use("api/v1/subscriptions", subscriptionsRouter);
+app.use("api/v1/playlist", playlist);
 
 export {app};   
