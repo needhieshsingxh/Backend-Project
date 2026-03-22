@@ -2,6 +2,14 @@
 
 A YouTube-like backend
 
+## Live API
+
+Base URL: https://backend-project-0o08.onrender.com
+
+Health endpoint:
+
+- GET `/api/v1/`
+
 ## What's this?
 
 Basically a video platform backend with:
@@ -30,7 +38,117 @@ Basically a video platform backend with:
    - JWT secrets (just make up some random strings)
 4. `npm start`
 
+## API Routes
+
+### Health
+
+| Method | Route      | Auth | What it does                              |
+| ------ | ---------- | ---- | ----------------------------------------- |
+| GET    | `/api/v1/` | No   | Health check. Returns API running status. |
+
+### Users
+
+Base: `/api/v1/users`
+
+| Method | Route              | Auth | What it does                                                     |
+| ------ | ------------------ | ---- | ---------------------------------------------------------------- |
+| POST   | `/register`        | No   | Register a new user with avatar and optional cover image upload. |
+| POST   | `/login`           | No   | Login user and issue tokens.                                     |
+| POST   | `/logout`          | Yes  | Logout current user.                                             |
+| POST   | `/refresh-token`   | No   | Refresh access token using refresh token.                        |
+| POST   | `/change-password` | Yes  | Change password for logged-in user.                              |
+| GET    | `/current-user`    | Yes  | Get current user profile.                                        |
+| PATCH  | `/update-account`  | Yes  | Update account fields.                                           |
+| PATCH  | `/avatar`          | Yes  | Update avatar image.                                             |
+| PATCH  | `/cover-image`     | Yes  | Update cover image.                                              |
+| GET    | `/c/:username`     | Yes  | Get channel profile by username.                                 |
+| GET    | `/history`         | Yes  | Get watch history for current user.                              |
+
+### Tweets
+
+Base: `/api/v1/tweet`
+
+| Method | Route       | Auth | What it does                   |
+| ------ | ----------- | ---- | ------------------------------ |
+| POST   | `/`         | Yes  | Create tweet.                  |
+| GET    | `/`         | Yes  | Get tweets for logged-in user. |
+| PATCH  | `/:tweetId` | Yes  | Update tweet.                  |
+| DELETE | `/:tweetId` | Yes  | Delete tweet.                  |
+
+### Comments
+
+Base: `/api/v1/comment`
+
+| Method | Route                  | Auth | What it does              |
+| ------ | ---------------------- | ---- | ------------------------- |
+| GET    | `/:videoId`            | No   | Get comments for a video. |
+| POST   | `/:videoId`            | Yes  | Add a comment to a video. |
+| PATCH  | `/:videoId/:commentId` | Yes  | Update a comment.         |
+| DELETE | `/:videoId/:commentId` | Yes  | Delete a comment.         |
+
+### Likes
+
+Base: `/api/v1/like`
+
+| Method | Route                  | Auth | What it does               |
+| ------ | ---------------------- | ---- | -------------------------- |
+| POST   | `/toggle/v/:videoId`   | No   | Toggle like for a video.   |
+| POST   | `/toggle/c/:commentId` | No   | Toggle like for a comment. |
+| POST   | `/toggle/t/:tweetId`   | No   | Toggle like for a tweet.   |
+| GET    | `/videos`              | No   | Get liked videos list.     |
+
+### Subscriptions
+
+Base: `/api/v1/subscriptions`
+
+| Method | Route                 | Auth | What it does                                      |
+| ------ | --------------------- | ---- | ------------------------------------------------- |
+| POST   | `/toggle/:channelId`  | Yes  | Subscribe/unsubscribe current user for a channel. |
+| GET    | `/channel/:channelId` | No   | Get subscriber list for a channel.                |
+| GET    | `/user/:subscriberId` | No   | Get channels subscribed by a user.                |
+
+### Playlists
+
+Base: `/api/v1/playlist`
+
+| Method | Route                          | Auth | What it does                |
+| ------ | ------------------------------ | ---- | --------------------------- |
+| POST   | `/`                            | Yes  | Create playlist.            |
+| GET    | `/user/:userId`                | Yes  | Get playlists by user.      |
+| GET    | `/:playlistId`                 | Yes  | Get playlist by id.         |
+| PATCH  | `/:playlistId`                 | Yes  | Update playlist.            |
+| DELETE | `/:playlistId`                 | Yes  | Delete playlist.            |
+| PATCH  | `/add/:playlistId/:videoId`    | Yes  | Add video to playlist.      |
+| PATCH  | `/remove/:playlistId/:videoId` | Yes  | Remove video from playlist. |
+
+### Videos
+
+Base: `/api/v1/video`
+
+| Method | Route                      | Auth | What it does                                                  |
+| ------ | -------------------------- | ---- | ------------------------------------------------------------- |
+| GET    | `/`                        | Yes  | Get all videos (query/filter/pagination logic in controller). |
+| POST   | `/`                        | Yes  | Publish a new video with thumbnail upload.                    |
+| GET    | `/v/:videoId`              | Yes  | Get video by id.                                              |
+| DELETE | `/v/:videoId`              | Yes  | Delete video by id.                                           |
+| PATCH  | `/v/:videoId`              | Yes  | Update video and thumbnail.                                   |
+| PATCH  | `/toggle/publish/:videoId` | Yes  | Toggle video publish status.                                  |
+
+### Dashboard
+
+Base: `/api/v1/dashboard`
+
+| Method | Route             | Auth | What it does               |
+| ------ | ----------------- | ---- | -------------------------- |
+| GET    | `/stats/:userId`  | Yes  | Get channel stats summary. |
+| GET    | `/videos/:userId` | Yes  | Get channel videos list.   |
+
+## Notes
+
+- Auth means JWT-protected route (`verifyJWT`).
+- File uploads use multipart form-data on relevant routes.
+- Route behavior is documented from current route/controller wiring in the codebase.
+
 ## Model Link
+
 Link: https://app.eraser.io/workspace/YtPqZ1VogxGy1jzIDkzj
-
-
